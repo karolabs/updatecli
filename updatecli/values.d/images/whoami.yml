@@ -8,10 +8,11 @@
 image:
   name: whoami
   repository: docker.io/traefik/whoami
-  tag_regex: '^v([0-9]+\.[0-9]+\.[0-9]+)$' # v1.0.0
-  semver:
-    pattern: '*'
-    strict: true
+  ## use updatecli policy defaults
+  # tag_regex: '^v([0-9]+\.[0-9]+\.[0-9]+)$' # v1.0.0
+  # semver:
+  #   pattern: '*'
+  #   strict: true
   file_key: $.karolabs_whoami_image
   pr_notes: |
     https://custom.karolabs.dev/karolabs_ops/whoami/
