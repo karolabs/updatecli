@@ -12,6 +12,5 @@ image:
   semver:
     pattern: '*'
     strict: true
-  # file_key: $.username_example_image
   # pr_notes: |
   #   https://example.com/docs

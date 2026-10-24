@@ -13,6 +13,5 @@ image:
   # semver:
   #   pattern: '*'
   #   strict: true
-  file_key: $.karolabs_cetusguard_image
   pr_notes: |
     https://custom.karolabs.dev/karolabs_core/traefik/

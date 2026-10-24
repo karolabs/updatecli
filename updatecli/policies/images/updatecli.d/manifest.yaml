@@ -43,7 +43,8 @@ targets:
       - addprefix: '{{ .image.repository }}:'
     spec:
       file: compose/images.yml
-      key: '{{ .image.file_key }}'
+      # use variable '<username>_<image name>_image'
+      key: '$.{{ requiredEnv "UPDATECLI_GITHUB_REPOSITORY_OWNER" }}_{{ .image.name }}_image'
 
 scms:
   # https://updatecli.io/docs/plugins/scm/github
