@@ -73,4 +73,4 @@ actions:
       title: 'Update {{ .image.repository }} to {{ source "dockerImageTag" }}'
       labels:
         - '{{ requiredEnv "UPDATECLI_GITHUB_PR_LABEL" }}'
-      description: '{{ .image.pr_notes }}'
+      description: '{{ .image.pr_markdown }}'

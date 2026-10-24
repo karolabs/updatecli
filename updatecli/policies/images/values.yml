@@ -12,5 +12,5 @@ image:
   semver:
     pattern: '*'
     strict: true
-  # pr_notes: |
+  # pr_markdown: |
   #   https://example.com/docs

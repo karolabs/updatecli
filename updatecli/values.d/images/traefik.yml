@@ -13,5 +13,5 @@ image:
   # semver:
   #   pattern: '*'
   #   strict: true
-  pr_notes: |
+  pr_markdown: |
     https://custom.karolabs.dev/karolabs_core/traefik/
