@@ -44,14 +44,10 @@ jobs:
           - cetusguard
           - pocketid
           - traefik
-        include:
-          - image: traefik
-            registry: dhi.io
 
     # pass variables and secrets
     with:
       docker-image: ${{ matrix.image }}
-      docker-registry: ${{ matrix.registry }}
       github-branch: dev
       github-pr-label: Kind/Update
     secrets:

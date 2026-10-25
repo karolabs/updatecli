@@ -21,10 +21,6 @@ on:
         description: Name of Docker image to update
         required: true
         type: string
-      docker-registry:
-        description: Registry of Docker image
-        required: false
-        type: string
       github-branch:
         description: Git branch to work on
         required: true
@@ -56,13 +52,18 @@ jobs:
         with:
           ref: ${{ inputs.github-branch }}
 
+      - name: Read image repository # https://github.com/mikefarah/yq
+        uses: mikefarah/yq@504fc38780cc46be8444ea1b72fb55919fc0bfb0 # v4.54.1
+        with:
+          cmd: yq '.image.repository' updatecli/values.d/images/${{ inputs.docker-image }}.yml
+
       - name: Run Docker Login # https://github.com/docker/login-action
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
-          registry: ${{ inputs.docker-registry }}
+          registry: dhi.io
           username: ${{ secrets.dockerhub-username }}
           password: ${{ secrets.dockerhub-token }}
-        if: ${{ inputs.docker-registry }}
+        if: ${{ startsWith(steps.image.outputs.result, 'dhi.io/') }}
 
       - name: Install Updatecli # https://github.com/updatecli/updatecli-action
         uses: updatecli/updatecli-action@93ae2608256484ef8598e902aa675bbc9e278e4e # v3.10.0
