@@ -28,7 +28,7 @@ jobs:
   call-updatecli-images:
     name: Updatecli Images
     # external workflow file
-    uses: karolabs/updatecli/.github/workflows/updatecli-images.yml@dev
+    uses: karolabs/updatecli/.github/workflows/updatecli-images-test.yml@dev
 
     # set permissions
     permissions:
