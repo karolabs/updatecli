@@ -74,7 +74,8 @@ jobs:
         run: |
           updatecli pipeline apply \
             --config updatecli/policies/images/updatecli.d \
-            --values updatecli/policies/images/values.yml,updatecli/values.d/images/${{ inputs.docker-image }}.yml \
+            --values updatecli/policies/images/values.yml \
+            --values updatecli/values.d/images/${{ inputs.docker-image }}.yml \
             --clean-git-branches=true
         env:
           UPDATECLI_GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
