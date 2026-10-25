@@ -1,0 +1,83 @@
+# SPDX-FileCopyrightText: © 2026 hazzuk
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+
+# GitHub Actions workflow, for running configurable automated processes.
+# See https://docs.github.com/actions for more information.
+# yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
+
+# Reusable Updatecli workflow,
+# for updating Docker images inside a karo-custom repo.
+
+# TEST WORKFLOW
+
+---
+
+# REUSABLE WORKFLOW
+on:
+  workflow_call:
+    inputs:
+      docker-image:
+        description: Name of Docker image to update
+        required: true
+        type: string
+      docker-registry:
+        description: Registry of Docker image
+        required: false
+        type: string
+      github-branch:
+        description: Git branch to work on
+        required: true
+        type: string
+      github-pr-label:
+        description: Repository label added to pull request
+        required: false
+        type: string
+    secrets:
+      dockerhub-username:
+        description: Docker Hub account username
+        required: false
+      dockerhub-token:
+        description: Docker Hub personal access token
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  karolabs-updatecli-images:
+    name: karolabs/updatecli/images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run Checkout # https://github.com/actions/checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.github-branch }}
+
+      - name: Install Updatecli # https://github.com/updatecli/updatecli-action
+        uses: updatecli/updatecli-action@93ae2608256484ef8598e902aa675bbc9e278e4e # v3.10.0
+
+      - name: Run Docker Login # https://github.com/docker/login-action
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ${{ inputs.docker-registry }}
+          username: ${{ secrets.dockerhub-username }}
+          password: ${{ secrets.dockerhub-token }}
+        if: ${{ inputs.docker-registry }}
+
+      - name: Run Updatecli
+        # https://github.com/karolabs/updatecli/pkgs/container/updatecli%2Fimages
+        run: |
+          updatecli pipeline apply \
+            --config updatecli/policies/images/updatecli.d \
+            --values updatecli/policies/images/values.yml,updatecli/values.d/images/${{ inputs.docker-image }}.yml \
+            --clean-git-branches=true
+        env:
+          UPDATECLI_GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          UPDATECLI_GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
+          UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPDATECLI_GITHUB_ACTOR: ${{ github.actor }}
+          UPDATECLI_GITHUB_BRANCH: ${{ inputs.github-branch }}
+          UPDATECLI_GITHUB_PR_LABEL: ${{ inputs.github-pr-label }}
