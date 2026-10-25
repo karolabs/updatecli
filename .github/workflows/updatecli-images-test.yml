@@ -64,7 +64,7 @@ jobs:
           registry: dhi.io
           username: ${{ secrets.dockerhub-username }}
           password: ${{ secrets.dockerhub-token }}
-        if: ${{ startsWith(steps.imageRepoLookup.outputs.result, 'dhi.io/') }}
+        if: startsWith(steps.imageRepoLookup.outputs.result, 'dhi.io/')
 
       - name: Install Updatecli # https://github.com/updatecli/updatecli-action
         uses: updatecli/updatecli-action@93ae2608256484ef8598e902aa675bbc9e278e4e # v3.10.0
