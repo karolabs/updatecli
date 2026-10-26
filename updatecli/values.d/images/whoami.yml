@@ -6,7 +6,6 @@
 # See https://updatecli.io for more information.
 
 image:
-  name: whoami
   repository: docker.io/traefik/whoami
   ## use updatecli policy defaults
   # tag_regex: '^v([0-9]+\.[0-9]+\.[0-9]+)$' # v1.0.0

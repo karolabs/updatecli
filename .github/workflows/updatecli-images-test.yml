@@ -126,6 +126,7 @@ jobs:
             --values updatecli/values.d/images/${{ matrix.image }}.yml \
             --clean-git-branches=true
         env:
+          UPDATECLI_IMAGE_NAME: ${{ matrix.image }}
           UPDATECLI_GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
           UPDATECLI_GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

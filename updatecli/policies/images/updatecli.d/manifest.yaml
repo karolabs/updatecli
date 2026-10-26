@@ -7,7 +7,7 @@
 # yaml-language-server: $schema=https://www.updatecli.io/schema/latest/policy/manifest/config.json
 
 name: 'Update {{ .image.repository }} image tag'
-pipelineid: 'images-{{ .image.name }}' # pr branch name
+pipelineid: 'images-{{ requiredEnv "UPDATECLI_IMAGE_NAME" }}' # pr branch name
 
 sources:
   # https://updatecli.io/docs/plugins/resource/docker_image
@@ -35,7 +35,7 @@ sources:
 targets:
   # https://updatecli.io/docs/plugins/resource/yaml
   imagesFile:
-    name: 'bump {{ .image.name }} image tag to {{ source "dockerImageTag" }}' # commit title
+    name: 'bump {{ requiredEnv "UPDATECLI_IMAGE_NAME" }} image tag to {{ source "dockerImageTag" }}' # commit title
     kind: yaml
     sourceid: dockerDigest
     scmid: default
@@ -44,7 +44,7 @@ targets:
     spec:
       file: compose/images.yml
       # use variable '<username>_<image name>_image'
-      key: '$.{{ requiredEnv "UPDATECLI_GITHUB_REPOSITORY_OWNER" }}_{{ .image.name }}_image'
+      key: '$.{{ requiredEnv "UPDATECLI_GITHUB_REPOSITORY_OWNER" }}_{{ requiredEnv "UPDATECLI_IMAGE_NAME" }}_image'
 
 scms:
   # https://updatecli.io/docs/plugins/scm/github
