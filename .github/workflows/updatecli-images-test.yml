@@ -73,6 +73,9 @@ jobs:
           # convert list to json
           images_json = json.dumps(images_names)
 
+          # print json to workflow log
+          print(images_json)
+
           # write json to output file
           with open(os.environ["GITHUB_OUTPUT"], "a") as output:
               output.write(f"images={images_json}\n")
