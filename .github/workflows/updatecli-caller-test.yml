@@ -35,19 +35,8 @@ jobs:
       contents: write
       pull-requests: write
 
-    # define images
-    strategy:
-      fail-fast: false
-      matrix:
-        image:
-          - whoami
-          - cetusguard
-          - pocketid
-          - traefik
-
     # pass variables and secrets
     with:
-      docker-image: ${{ matrix.image }}
       github-branch: dev
       github-pr-label: Kind/Update
     secrets:
