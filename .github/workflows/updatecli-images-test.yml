@@ -33,14 +33,13 @@ on:
         description: Docker Hub personal access token
         required: false
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
 
   karolabs-setup:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
 
     outputs:
       images: ${{ steps.discover-images.outputs.images }}
@@ -82,6 +81,10 @@ jobs:
     name: karolabs/updatecli/images
     needs: karolabs-setup
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
 
     strategy:
       fail-fast: false # don't stop all jobs when one errors
