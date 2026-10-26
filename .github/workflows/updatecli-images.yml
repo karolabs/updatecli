@@ -96,6 +96,11 @@ jobs:
         image: ${{ fromJSON(needs.karolabs-setup.outputs.images) }}
 
     steps:
+      - name: Install Updatecli # https://github.com/updatecli/updatecli-action
+        uses: updatecli/updatecli-action@93ae2608256484ef8598e902aa675bbc9e278e4e # v3.10.0
+        id: install-updatecli
+        background: true
+
       - name: Run Checkout # https://github.com/actions/checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -120,8 +125,8 @@ jobs:
           password: ${{ secrets.dockerhub-token }}
         if: startsWith(steps.lookup-image-repo.outputs.result, 'dhi.io/')
 
-      - name: Install Updatecli # https://github.com/updatecli/updatecli-action
-        uses: updatecli/updatecli-action@93ae2608256484ef8598e902aa675bbc9e278e4e # v3.10.0
+      - name: Wait for Updatecli installation
+        wait: install-updatecli
 
       - name: Run Updatecli
         # https://github.com/karolabs/updatecli/pkgs/container/updatecli%2Fimages
