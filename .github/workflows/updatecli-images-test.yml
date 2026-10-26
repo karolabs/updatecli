@@ -101,10 +101,12 @@ jobs:
           ref: ${{ inputs.github-branch }}
 
       - name: Read image repository # https://github.com/mikefarah/yq
-        id: imageRepoLookup
-        uses: mikefarah/yq@504fc38780cc46be8444ea1b72fb55919fc0bfb0 # v4.54.1
-        with:
-          cmd: yq '.image.repository' updatecli/values.d/images/${{ matrix.image }}.yml
+        id: lookup-image-repo
+        run: |
+          repo="$(yq '.image.repository' "updatecli/values.d/images/${IMAGE}.yml")"
+          printf 'result=%s\n' "$repo" >> "$GITHUB_OUTPUT"
+        env:
+          IMAGE: ${{ matrix.image }}
 
       - name: Run Docker Login # https://github.com/docker/login-action
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
@@ -112,7 +114,7 @@ jobs:
           registry: dhi.io
           username: ${{ secrets.dockerhub-username }}
           password: ${{ secrets.dockerhub-token }}
-        if: startsWith(steps.imageRepoLookup.outputs.result, 'dhi.io/')
+        if: startsWith(steps.lookup-image-repo.outputs.result, 'dhi.io/')
 
       - name: Install Updatecli # https://github.com/updatecli/updatecli-action
         uses: updatecli/updatecli-action@93ae2608256484ef8598e902aa675bbc9e278e4e # v3.10.0
@@ -123,7 +125,7 @@ jobs:
           updatecli pipeline apply \
             --config updatecli/policies/images/updatecli.d \
             --values updatecli/policies/images/values.yml \
-            --values updatecli/values.d/images/${{ matrix.image }}.yml \
+            --values updatecli/values.d/images/${UPDATECLI_IMAGE_NAME}.yml \
             --clean-git-branches=true
         env:
           UPDATECLI_IMAGE_NAME: ${{ matrix.image }}
