@@ -17,9 +17,9 @@ on:
   # manual trigger
   workflow_dispatch:
   # once per day
-  # schedule:
-  #   - cron: "0 0 * * *"
-  #     timezone: "Europe/London"
+  schedule:
+    - cron: "0 0 * * *"
+      timezone: "Europe/London"
 
 jobs:
 
