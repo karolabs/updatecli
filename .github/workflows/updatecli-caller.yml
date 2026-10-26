@@ -28,14 +28,14 @@ jobs:
     # external workflow file
     uses: karolabs/updatecli/.github/workflows/updatecli-images.yml@main
 
-    # set permissions
+    # grant permissions
     permissions:
       contents: write
       pull-requests: write
 
     # pass variables and secrets
     with:
-      github-branch: dev
+      github-branch: dev # (required)
       github-pr-label: Kind/Update
     secrets:
       dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
