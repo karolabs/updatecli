@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-only
 
-# karo-custom images file, for declaraing Docker image values.
+# karo-custom images file, for declaring Docker image values.
 # See https://docs.karolabs.dev for more information.
 
 # ---
