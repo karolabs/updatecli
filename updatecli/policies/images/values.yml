@@ -5,8 +5,11 @@
 # An `updatecli` values file, for declaring generic values.
 # See https://updatecli.io for more information.
 
+# Policy default values.
+# When undefined, these values will be used.
+
 image:
-  # repository: docker.io/exampleorg/example
+  # repository: docker.io/exampleorg/example # (required)
   tag_regex: '^v([0-9]+\.[0-9]+\.[0-9]+)$' # v1.0.0
   semver:
     pattern: '*'
