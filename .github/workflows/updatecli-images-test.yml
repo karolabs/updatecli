@@ -49,6 +49,9 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ inputs.github-branch }}
+          sparse-checkout: |
+            updatecli/values.d/images
+          sparse-checkout-cone-mode: true # dirs only
 
       - name: Discover images in values.d/images
         id: discover-images
@@ -99,6 +102,10 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ inputs.github-branch }}
+          sparse-checkout: |
+            compose/images.yml
+            updatecli/values.d/images
+            updatecli/policies/images
 
       - name: Read image repository # https://github.com/mikefarah/yq
         id: lookup-image-repo
