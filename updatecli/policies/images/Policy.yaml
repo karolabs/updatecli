@@ -15,7 +15,7 @@ url: "https://github.com/karolabs/updatecli"
 
 source: "https://github.com/karolabs/updatecli/tree/main/updatecli/policies/images"
 
-version: 0.3.0
+version: 0.4.0
 
 vendor: karolabs
 

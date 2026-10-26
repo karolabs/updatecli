@@ -119,7 +119,7 @@ jobs:
         # https://github.com/karolabs/updatecli/pkgs/container/updatecli%2Fimages
         run: |
           updatecli pipeline apply \
-            ghcr.io/karolabs/updatecli/images:0.3.0 \
+            ghcr.io/karolabs/updatecli/images:0.4.0 \
             --values updatecli/values.d/images/${{ matrix.image }}.yml \
             --clean-git-branches=true
         env:
