@@ -15,14 +15,6 @@
 on:
   workflow_call:
     inputs:
-      docker-image:
-        description: Name of Docker image to update
-        required: true
-        type: string
-      docker-registry:
-        description: Registry of Docker image
-        required: false
-        type: string
       github-branch:
         description: Git branch to work on
         required: true
@@ -39,14 +31,16 @@ on:
         description: Docker Hub personal access token
         required: false
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
-  karolabs-updatecli-images:
-    name: karolabs/updatecli/images
+
+  karolabs-setup:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    outputs:
+      images: ${{ steps.discover-images.outputs.images }}
 
     steps:
       - name: Run Checkout # https://github.com/actions/checkout
@@ -54,23 +48,79 @@ jobs:
         with:
           ref: ${{ inputs.github-branch }}
 
-      - name: Install Updatecli # https://github.com/updatecli/updatecli-action
-        uses: updatecli/updatecli-action@93ae2608256484ef8598e902aa675bbc9e278e4e # v3.10.0
+      - name: Discover images in values.d/images
+        id: discover-images
+        shell: python
+        run: |
+          import json
+          import os
+          from pathlib import Path
+
+          images_dir: Path = Path("updatecli/values.d/images")
+          images_names: list[str] = []
+          images_json: str = ""
+
+          # lookup all values files
+          for path in images_dir.glob("*.yml"):
+              # use file name without extension
+              images_names.append(path.stem)
+
+          # sort list alphabetically
+          images_names.sort()
+
+          # convert list to json
+          images_json = json.dumps(images_names)
+
+          # print json to workflow log
+          print(images_json)
+
+          # write json to output file
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              output.write(f"images={images_json}\n")
+
+  karolabs-updatecli-images:
+    name: karolabs/updatecli/images
+    needs: karolabs-setup
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    strategy:
+      fail-fast: false # don't stop all jobs when one errors
+      matrix:
+        image: ${{ fromJSON(needs.karolabs-setup.outputs.images) }}
+
+    steps:
+      - name: Run Checkout # https://github.com/actions/checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.github-branch }}
+
+      - name: Read image repository # https://github.com/mikefarah/yq
+        id: imageRepoLookup
+        uses: mikefarah/yq@504fc38780cc46be8444ea1b72fb55919fc0bfb0 # v4.54.1
+        with:
+          cmd: yq '.image.repository' updatecli/values.d/images/${{ matrix.image }}.yml
 
       - name: Run Docker Login # https://github.com/docker/login-action
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
-          registry: ${{ inputs.docker-registry }}
+          registry: dhi.io
           username: ${{ secrets.dockerhub-username }}
           password: ${{ secrets.dockerhub-token }}
-        if: ${{ inputs.docker-registry }}
+        if: startsWith(steps.imageRepoLookup.outputs.result, 'dhi.io/')
+
+      - name: Install Updatecli # https://github.com/updatecli/updatecli-action
+        uses: updatecli/updatecli-action@93ae2608256484ef8598e902aa675bbc9e278e4e # v3.10.0
 
       - name: Run Updatecli
         # https://github.com/karolabs/updatecli/pkgs/container/updatecli%2Fimages
         run: |
           updatecli pipeline apply \
             ghcr.io/karolabs/updatecli/images:0.3.0 \
-            --values updatecli/values.d/images/${{ inputs.docker-image }}.yml \
+            --values updatecli/values.d/images/${{ matrix.image }}.yml \
             --clean-git-branches=true
         env:
           UPDATECLI_GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
