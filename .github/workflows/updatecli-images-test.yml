@@ -6,9 +6,6 @@
 # See https://docs.github.com/actions for more information.
 # yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
 
-# Reusable Updatecli workflow,
-# for updating Docker images inside a karo-custom repo.
-
 # TEST WORKFLOW
 
 ---
