@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: © 2026 hazzuk
 #
-# SPDX-License-Identifier: AGPL-3.0-only
+# SPDX-License-Identifier: MIT
 
 # GitHub Actions workflow, for running configurable automated processes.
 # See https://docs.github.com/actions for more information.
