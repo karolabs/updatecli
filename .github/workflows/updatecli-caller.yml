@@ -6,8 +6,8 @@
 # See https://docs.github.com/actions for more information.
 # yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
 
-# Example Updatecli workflow,
-# for calling karolabs Updatecli policies from any karo-custom repo.
+# Updatecli caller workflow for karo-custom repos.
+# Automatically updates Docker image tags via GitHub pull requests.
 
 ---
 
