@@ -6,11 +6,10 @@
 # See https://docs.github.com/actions for more information.
 # yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
 
-# TEST WORKFLOW
-
 ---
 
-# REUSABLE WORKFLOW
+name: Updatecli - Docker images (test)
+
 on:
   workflow_call:
     inputs:

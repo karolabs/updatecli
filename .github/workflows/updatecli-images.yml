@@ -6,12 +6,13 @@
 # See https://docs.github.com/actions for more information.
 # yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
 
-# Reusable Updatecli workflow,
-# for updating Docker images inside a karo-custom repo.
-
 ---
 
-# REUSABLE WORKFLOW
+name: Updatecli - Docker images
+
+# Reusable Updatecli workflow,
+# for updating Docker image tags via PRs inside a karo-custom repo.
+
 on:
   workflow_call:
     inputs:

@@ -6,12 +6,12 @@
 # See https://docs.github.com/actions for more information.
 # yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
 
-# Internal Updatecli workflow,
-# for publishing policies to the ghcr.io OCI registry.
-
 ---
 
-name: Publish Updatecli Policies
+name: Updatecli - Publish Policies
+
+# Internal Updatecli workflow,
+# for publishing policies to the ghcr.io OCI registry.
 
 on:
   # manual trigger
